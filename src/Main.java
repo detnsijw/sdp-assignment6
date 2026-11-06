@@ -1,13 +1,24 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+import elements.CommercialLoanAccount;
+import elements.SavingsAccount;
+import structure.BankPortfolio;
+import visitor.FinancialAuditVisitor;
+import visitor.XmlExportVisitor;
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
+public class Main {
+    public static void main(String[] args) {
+        BankPortfolio portfolio = new BankPortfolio();
+        portfolio.addAccount(new SavingsAccount("SAV-1001", 15000.0, 0.04));
+        portfolio.addAccount(new CommercialLoanAccount("LOAN-5002", 50000.0, 0.08, 1200.0));
+        portfolio.addAccount(new SavingsAccount("SAV-1002", 8200.0, 0.035));
+
+        System.out.println("EXECUTING FINANCIAL AUDIT VISITOR");
+        FinancialAuditVisitor auditVisitor = new FinancialAuditVisitor();
+        portfolio.acceptAll(auditVisitor);
+        auditVisitor.printAuditSummary();
+
+        System.out.println("EXECUTING XML EXPORT VISITOR");
+        XmlExportVisitor xmlVisitor = new XmlExportVisitor();
+        portfolio.acceptAll(xmlVisitor);
+        System.out.println(xmlVisitor.getExportedXml());
     }
 }
